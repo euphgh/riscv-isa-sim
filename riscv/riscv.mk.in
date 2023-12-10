@@ -1402,6 +1402,18 @@ riscv_insn_ext_zvk = \
 	$(riscv_insn_ext_zvksh) \
 
 riscv_insn_list = \
+	$(riscv_insn_ext_a) \
+	$(riscv_insn_ext_c) \
+	$(riscv_insn_ext_d) \
+	$(riscv_insn_ext_f) \
+	$(riscv_insn_ext_h) \
+	$(riscv_insn_ext_i) \
+	$(riscv_insn_ext_m) \
+	$(riscv_insn_priv) \
+	halt
+	
+### disable unused extension in PA
+#riscv_insn_list = \
 	$(if $(HAVE_INT128),$(riscv_insn_ext_v),) \
 	$(riscv_insn_ext_a) \
 	$(riscv_insn_ext_b) \
