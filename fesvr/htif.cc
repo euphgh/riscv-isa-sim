@@ -253,8 +253,13 @@ int htif_t::run()
     std::bind(enq_func, &fromhost_queue, std::placeholders::_1);
 
   if (tohost_addr == 0) {
-    while (!signal_exit)
-      idle();
+    try {
+      while (!signal_exit)
+          idle();
+    } catch (halt_exception &he) {
+      exitcode = he.exitcode;
+      goto sim_end;
+    }
   }
 
   while (!signal_exit && exitcode == 0)
@@ -281,6 +286,9 @@ int htif_t::run()
       std::stringstream tohost_hex;
       tohost_hex << std::hex << tohost;
       bad_address("host was accessing memory on behalf of target (tohost = 0x" + tohost_hex.str() + ")", t.get_tval());
+    } catch (halt_exception &he) {
+      exitcode = he.exitcode;
+      goto sim_end;
     }
 
     try {
@@ -293,6 +301,7 @@ int htif_t::run()
     }
   }
 
+sim_end:
   stop();
 
   return exit_code();

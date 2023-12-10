@@ -100,6 +100,14 @@ class mem_trap_t : public trap_t
   std::string name() { return "trap_"#x; } \
 };
 
+class halt_exception : public std::exception {
+public:
+  const reg_t pc;
+  const reg_t exitcode;
+  halt_exception(unsigned _pc, unsigned _exitcode)
+      : pc(_pc), exitcode((int)_exitcode << 1) {}
+};
+
 DECLARE_MEM_TRAP(CAUSE_MISALIGNED_FETCH, instruction_address_misaligned)
 DECLARE_MEM_TRAP(CAUSE_FETCH_ACCESS, instruction_access_fault)
 DECLARE_INST_TRAP(CAUSE_ILLEGAL_INSTRUCTION, illegal_instruction)
